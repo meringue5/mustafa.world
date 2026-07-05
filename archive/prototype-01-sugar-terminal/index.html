@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mustafa World - Prototype 0</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="world-shell" aria-label="Mustafa World Prototype 0">
+      <section class="terminal-frame" aria-label="Terminal world frame">
+        <div class="frame-ornament frame-ornament--top" aria-hidden="true"></div>
+        <div class="terminal-window">
+          <header class="terminal-header">
+            <div class="terminal-title">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>MUSTAFA WORLD</span>
+            </div>
+            <div class="terminal-meta" id="clock">--:--</div>
+          </header>
+
+          <section class="log-pane" id="logPane" aria-label="로그 영역" aria-live="polite">
+            <img class="room-art" id="roomArt" src="assets/room-living.svg" alt="" aria-hidden="true" />
+            <div class="log-lines" id="logLines"></div>
+          </section>
+
+          <section class="status-bar" aria-label="상태바">
+            <div class="status-cell">
+              <span class="status-label">HP</span>
+              <span class="meter" aria-hidden="true"><span id="hpMeter"></span></span>
+              <span id="hpText">08</span>
+            </div>
+            <div class="status-cell">
+              <span class="status-label">MP</span>
+              <span class="meter" aria-hidden="true"><span id="mpMeter"></span></span>
+              <span id="mpText">05</span>
+            </div>
+            <div class="status-cell">
+              <span class="status-label">ST</span>
+              <span class="meter" aria-hidden="true"><span id="stMeter"></span></span>
+              <span id="stText">07</span>
+            </div>
+            <div class="status-cell status-cell--room">
+              <span class="status-label">LOC</span>
+              <span id="roomName">거실</span>
+            </div>
+          </section>
+
+          <section class="suggestion-tray" id="suggestionTray" aria-label="입력 후보">
+            <div class="suggestions" id="suggestions"></div>
+          </section>
+
+          <form class="command-row" id="commandForm" autocomplete="off">
+            <label class="prompt-mark" for="commandInput">&gt;</label>
+            <input
+              id="commandInput"
+              name="command"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              aria-label="명령 입력"
+            />
+            <span class="cursor-block" aria-hidden="true"></span>
+          </form>
+        </div>
+        <div class="frame-ornament frame-ornament--bottom" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

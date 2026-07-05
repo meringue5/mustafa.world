@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "IyagiGGCHalf";
+  src: url("https://cdn.jsdelivr.net/gh/JuwanPark/IyagiGGC@latest/IyagiGGCHalf.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000000;
+  color: #aaaaaa;
+  font-family: "IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
+  font-feature-settings: "ss01" 1;
+  letter-spacing: 0;
+}
+
+#terminal {
+  width: 100%;
+  height: 100dvh;
+}
+
+.xterm {
+  height: 100%;
+  font-feature-settings: "ss01" 1;
+  padding: 14px 16px;
+}
+
+.xterm-viewport {
+  scrollbar-width: thin;
+}

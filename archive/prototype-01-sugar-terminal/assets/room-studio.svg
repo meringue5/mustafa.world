@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" shape-rendering="crispEdges" role="img" aria-label="작업실 픽셀 아트">
+  <rect width="160" height="120" fill="#07110d"/>
+  <rect x="8" y="8" width="144" height="96" fill="#101d1b"/>
+  <rect x="24" y="24" width="54" height="34" fill="#182924"/>
+  <rect x="30" y="30" width="42" height="22" fill="#62d7be"/>
+  <rect x="36" y="36" width="30" height="4" fill="#07110d"/>
+  <rect x="22" y="66" width="94" height="10" fill="#b88446"/>
+  <rect x="28" y="76" width="10" height="22" fill="#513016"/>
+  <rect x="98" y="76" width="10" height="22" fill="#513016"/>
+  <rect x="88" y="34" width="36" height="8" fill="#7a3f42"/>
+  <rect x="88" y="48" width="42" height="8" fill="#294c3e"/>
+  <rect x="118" y="62" width="12" height="36" fill="#f0ca7a"/>
+  <rect x="38" y="82" width="28" height="6" fill="#c6f2cf"/>
+  <rect x="70" y="82" width="18" height="6" fill="#e4878e"/>
+  <rect x="0" y="104" width="160" height="16" fill="#0b1712"/>
+</svg>

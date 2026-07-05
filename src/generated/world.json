@@ -1,0 +1,575 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-05T11:03:57.441Z",
+  "startRoom": "home.study",
+  "rooms": {
+    "home.bedroom": {
+      "id": "home.bedroom",
+      "slug": "bedroom",
+      "type": "room",
+      "name": "침실",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "private",
+        "rest"
+      ],
+      "objects": [
+        {
+          "id": "bed",
+          "name": "bed",
+          "aliases": [
+            "bed"
+          ]
+        },
+        {
+          "id": "closet",
+          "name": "closet",
+          "aliases": [
+            "closet"
+          ]
+        }
+      ],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "doorway",
+          "aliases": [
+            "거실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "수면과 회복의 장소다.",
+      "sensation": "세계의 해상도가 낮아지는 방.",
+      "text": [
+        "침실",
+        "수면과 회복의 장소다.",
+        "세계의 해상도가 낮아지는 방."
+      ],
+      "source": "world-vault/rooms/home/bedroom.md"
+    },
+    "home.entryway": {
+      "id": "home.entryway",
+      "slug": "entryway",
+      "type": "room",
+      "name": "현관",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "threshold"
+      ],
+      "objects": [
+        {
+          "id": "shoes",
+          "name": "shoes",
+          "aliases": [
+            "shoes"
+          ]
+        },
+        {
+          "id": "door",
+          "name": "door",
+          "aliases": [
+            "door"
+          ]
+        }
+      ],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "doorway",
+          "aliases": [
+            "거실",
+            "안으로"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": "거실 쪽 공기가 현관보다 조금 더 따뜻하다."
+        }
+      ],
+      "description": "집과 바깥이 맞닿는 얇은 장소다.",
+      "sensation": "신발, 문, 외출 직전의 작은 지연.",
+      "text": [
+        "현관",
+        "집과 바깥이 맞닿는 얇은 장소다.",
+        "신발, 문, 외출 직전의 작은 지연."
+      ],
+      "source": "world-vault/rooms/home/entryway.md"
+    },
+    "home.kitchen_veranda": {
+      "id": "home.kitchen_veranda",
+      "slug": "kitchen-veranda",
+      "type": "room",
+      "name": "주방 베란다",
+      "area": "home",
+      "tags": [
+        "home",
+        "veranda",
+        "utility"
+      ],
+      "objects": [],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.kitchen",
+          "label": "주방",
+          "type": "threshold",
+          "aliases": [
+            "주방",
+            "부엌"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "주방에 붙은 실용적인 가장자리다.",
+      "sensation": "물건을 잠시 밀어두는 곳. 실내와 바깥 사이의 차가운 층.",
+      "text": [
+        "주방 베란다",
+        "주방에 붙은 실용적인 가장자리다.",
+        "물건을 잠시 밀어두는 곳. 실내와 바깥 사이의 차가운 층."
+      ],
+      "source": "world-vault/rooms/home/kitchen-veranda.md"
+    },
+    "home.kitchen": {
+      "id": "home.kitchen",
+      "slug": "kitchen",
+      "type": "room",
+      "name": "주방",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "food"
+      ],
+      "objects": [
+        {
+          "id": "sink",
+          "name": "sink",
+          "aliases": [
+            "sink"
+          ]
+        },
+        {
+          "id": "fridge",
+          "name": "fridge",
+          "aliases": [
+            "fridge"
+          ]
+        },
+        {
+          "id": "stove",
+          "name": "stove",
+          "aliases": [
+            "stove"
+          ]
+        }
+      ],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "opening",
+          "aliases": [
+            "거실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.kitchen_veranda",
+          "label": "주방 베란다",
+          "type": "threshold",
+          "aliases": [
+            "주방 베란다",
+            "베란다"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "물, 불, 냉장고가 모여 있는 실용적인 장소다.",
+      "sensation": "아침의 물소리와 밤의 냉장고 소리.",
+      "text": [
+        "주방",
+        "물, 불, 냉장고가 모여 있는 실용적인 장소다.",
+        "아침의 물소리와 밤의 냉장고 소리."
+      ],
+      "source": "world-vault/rooms/home/kitchen.md"
+    },
+    "home.living_veranda": {
+      "id": "home.living_veranda",
+      "slug": "living-veranda",
+      "type": "room",
+      "name": "거실 베란다",
+      "area": "home",
+      "tags": [
+        "home",
+        "veranda",
+        "view"
+      ],
+      "objects": [],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "threshold",
+          "aliases": [
+            "거실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "거실에 붙은 바깥쪽 가장자리다.",
+      "sensation": "집 안에 있으면서 바깥이 있다는 사실을 확인하는 곳.",
+      "text": [
+        "거실 베란다",
+        "거실에 붙은 바깥쪽 가장자리다.",
+        "집 안에 있으면서 바깥이 있다는 사실을 확인하는 곳."
+      ],
+      "source": "world-vault/rooms/home/living-veranda.md"
+    },
+    "home.living": {
+      "id": "home.living",
+      "slug": "living",
+      "type": "room",
+      "name": "거실",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "hub"
+      ],
+      "objects": [
+        {
+          "id": "sofa",
+          "name": "sofa",
+          "aliases": [
+            "sofa"
+          ]
+        },
+        {
+          "id": "table",
+          "name": "table",
+          "aliases": [
+            "table"
+          ]
+        },
+        {
+          "id": "tv",
+          "name": "tv",
+          "aliases": [
+            "tv"
+          ]
+        }
+      ],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.entryway",
+          "label": "현관",
+          "type": "doorway",
+          "aliases": [
+            "현관",
+            "밖"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.bedroom",
+          "label": "침실",
+          "type": "doorway",
+          "aliases": [
+            "침실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.kitchen",
+          "label": "주방",
+          "type": "opening",
+          "aliases": [
+            "주방",
+            "부엌"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.small_room",
+          "label": "작은방",
+          "type": "doorway",
+          "aliases": [
+            "작은방"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.study",
+          "label": "서재",
+          "type": "doorway",
+          "aliases": [
+            "서재"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.living_veranda",
+          "label": "거실 베란다",
+          "type": "threshold",
+          "aliases": [
+            "거실 베란다",
+            "베란다"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "집 안의 허브다.",
+      "sensation": "사람이 지나간 자국이 가장 많이 남는 방. 다른 방들이 여기에서 갈라진다.",
+      "text": [
+        "거실",
+        "집 안의 허브다.",
+        "사람이 지나간 자국이 가장 많이 남는 방. 다른 방들이 여기에서 갈라진다."
+      ],
+      "source": "world-vault/rooms/home/living.md"
+    },
+    "home.small_room": {
+      "id": "home.small_room",
+      "slug": "small-room",
+      "type": "room",
+      "name": "작은방",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "storage"
+      ],
+      "objects": [],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "doorway",
+          "aliases": [
+            "거실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "아직 역할이 완전히 고정되지 않은 방이다.",
+      "sensation": "작다는 말이 방의 기능보다 먼저 떠오른다.",
+      "text": [
+        "작은방",
+        "아직 역할이 완전히 고정되지 않은 방이다.",
+        "작다는 말이 방의 기능보다 먼저 떠오른다."
+      ],
+      "source": "world-vault/rooms/home/small-room.md"
+    },
+    "home.study_veranda": {
+      "id": "home.study_veranda",
+      "slug": "study-veranda",
+      "type": "room",
+      "name": "서재 베란다",
+      "area": "home",
+      "tags": [
+        "home",
+        "veranda",
+        "work"
+      ],
+      "objects": [],
+      "actors": [],
+      "links": [
+        {
+          "to": "home.study",
+          "label": "서재",
+          "type": "threshold",
+          "aliases": [
+            "서재"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "서재에 붙은 작은 바깥쪽 공간이다.",
+      "sensation": "집중하다가 잠깐 눈을 떼는 곳.",
+      "text": [
+        "서재 베란다",
+        "서재에 붙은 작은 바깥쪽 공간이다.",
+        "집중하다가 잠깐 눈을 떼는 곳."
+      ],
+      "source": "world-vault/rooms/home/study-veranda.md"
+    },
+    "home.study": {
+      "id": "home.study",
+      "slug": "study",
+      "type": "room",
+      "name": "서재",
+      "area": "home",
+      "tags": [
+        "home",
+        "indoor",
+        "work",
+        "books"
+      ],
+      "objects": [
+        {
+          "id": "desk",
+          "name": "책상",
+          "aliases": [
+            "책상"
+          ],
+          "tags": []
+        },
+        {
+          "id": "laptop",
+          "name": "노트북",
+          "aliases": [
+            "노트북",
+            "컴퓨터"
+          ],
+          "tags": []
+        },
+        {
+          "id": "bookshelf",
+          "name": "책장",
+          "aliases": [
+            "책장",
+            "책"
+          ],
+          "tags": []
+        }
+      ],
+      "actors": [
+        {
+          "id": "noa",
+          "name": "노아",
+          "aliases": [
+            "노아"
+          ],
+          "tags": [
+            "animate",
+            "touchable"
+          ],
+          "description": "노아가 책상 위에 드러누워 있다.",
+          "ambient": [
+            "노아가 자기 발바닥을 핥는다.",
+            "노아가 당신을 빤히 본다.",
+            "노아가 사냥 놀이 자세를 취한다."
+          ]
+        }
+      ],
+      "links": [
+        {
+          "to": "home.living",
+          "label": "거실",
+          "type": "doorway",
+          "aliases": [
+            "거실"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        },
+        {
+          "to": "home.study_veranda",
+          "label": "서재 베란다",
+          "type": "threshold",
+          "aliases": [
+            "서재 베란다",
+            "베란다"
+          ],
+          "bidirectional": true,
+          "oneWay": false,
+          "visibleWhen": [],
+          "enabledWhen": [],
+          "blockedText": null,
+          "arrivalText": null
+        }
+      ],
+      "description": "읽고 쓰고 생각을 펼치는 장소다. 책상 위에는 노트북이 열려 있고, 책장에는 아직 읽다 만 책들이 꽂혀 있다.",
+      "sensation": "책, 화면, 미뤄둔 문장.",
+      "text": [
+        "서재",
+        "읽고 쓰고 생각을 펼치는 장소다. 책상 위에는 노트북이 열려 있고, 책장에는 아직 읽다 만 책들이 꽂혀 있다.",
+        "책, 화면, 미뤄둔 문장."
+      ],
+      "source": "world-vault/rooms/home/study.md"
+    }
+  }
+}

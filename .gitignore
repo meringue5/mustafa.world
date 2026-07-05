@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+dist/
+.vite/
+.publish/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+world-vault/.obsidian/workspace.json
+world-vault/.obsidian/workspace-mobile.json
