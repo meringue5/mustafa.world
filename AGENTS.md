@@ -42,6 +42,16 @@ DOM/CSS는 다음 용도까지 허용한다.
 -   `docs/design/actor.md`
 -   `docs/design/item.md`
 -   `docs/design/ontology.md`
+-   `docs/design/environment.md`
+
+## 개발/배포 환경
+
+-   자세한 구조는 `docs/design/environment.md`를 따른다.
+-   루트 `index.html`은 GitHub Pages가 직접 서빙하는 사용자용 파일이 아니라 Vite entry/template이다.
+-   실제 Pages 배포물은 GitHub Actions가 `npm run build`로 생성한 `dist/index.html`이다.
+-   GitHub Pages source는 `GitHub Actions`로 유지한다. `main / root` branch deploy로 바꾸지 않는다.
+-   `dist/`, `node_modules/`, `.publish/`는 commit하지 않는다.
+-   `.publish/`는 이 작업 환경에서 원격 push가 필요할 때 쓰는 임시 clone일 뿐 canonical source가 아니다.
 
 ## 커맨드 컴포저 원칙
 
