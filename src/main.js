@@ -1,13 +1,18 @@
 import { Terminal } from "@xterm/xterm";
-import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import { startWorld } from "./world.js";
 
 const terminalElement = document.querySelector("#terminal");
 const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace';
+const TERMINAL_COLS = 132;
+const TERMINAL_ROWS = 50;
+const TERMINAL_FRAME_WIDTH = 1220;
+const TERMINAL_FRAME_HEIGHT = 778;
+const STAGE_MARGIN = 32;
 
 const terminal = new Terminal({
   allowTransparency: false,
+  cols: TERMINAL_COLS,
   convertEol: false,
   customGlyphs: false,
   cursorBlink: true,
@@ -19,6 +24,7 @@ const terminal = new Terminal({
   fontWeightBold: "normal",
   letterSpacing: 0,
   lineHeight: 1,
+  rows: TERMINAL_ROWS,
   scrollback: 0,
   theme: {
     background: "#000000",
@@ -44,19 +50,22 @@ const terminal = new Terminal({
   }
 });
 
-const fitAddon = new FitAddon();
-terminal.loadAddon(fitAddon);
 terminal.open(terminalElement);
+terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
 
-function fit() {
-  fitAddon.fit();
+function updateStageScale() {
+  const widthScale = (window.innerWidth - STAGE_MARGIN) / TERMINAL_FRAME_WIDTH;
+  const heightScale = (window.innerHeight - STAGE_MARGIN) / TERMINAL_FRAME_HEIGHT;
+  const scale = Math.min(widthScale, heightScale, 1);
+  document.documentElement.style.setProperty("--terminal-scale", String(Math.max(scale, 0.45)));
 }
 
-fit();
-window.addEventListener("resize", fit);
+updateStageScale();
+window.addEventListener("resize", updateStageScale);
 
 document.fonts?.ready.then(() => {
-  fit();
+  terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
+  updateStageScale();
   terminal.refresh(0, terminal.rows - 1);
 });
 

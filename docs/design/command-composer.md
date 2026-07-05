@@ -148,3 +148,5 @@ player has 츄르
 -   planning/action schema
 
 파서를 더 똑똑하게 만들기 전에 LLM식 텍스트 완성보다 이 영역을 먼저 조사한다.
+
+참고 자료는 [References](references.md)에 모은다. 특히 Inform, ZIL/Z-machine, TADS 계열은 고전 parser-based IF가 이미 다뤄온 `verb + object + indirect object`, scope, visible object, affordance 설계를 확인하기 위한 주요 후보로 둔다.

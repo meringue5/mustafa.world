@@ -64,6 +64,26 @@ push to main
 
 `vite.config.js`의 `base: "./"`는 GitHub Pages의 하위 경로(`/mustafa.world/`)에서도 asset 경로가 깨지지 않게 하기 위한 설정이다.
 
+## Push / Deploy Policy
+
+`git push`는 원격 저장소 갱신이면서 GitHub Pages 배포 트리거다. 따라서 push는 단순 저장이나 백업이 아니라 배포 행위로 취급한다.
+
+사용자가 해당 턴에서 명시적으로 요청하기 전에는 push하지 않는다.
+
+다음 표현은 push 요청으로 해석하지 않는다.
+
+-   문서에 적어두자
+-   로컬에서 고치자
+-   빌드해보자
+-   확인해보자
+
+다음처럼 명시된 경우에만 push한다.
+
+-   push해줘
+-   배포해줘
+-   GitHub에 올려줘
+-   원격에 반영해줘
+
 ## Commit 대상
 
 commit한다:

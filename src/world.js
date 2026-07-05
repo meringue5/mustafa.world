@@ -40,6 +40,11 @@ const builtInCommands = {
   "연결": "links",
   status: "status",
   "상태": "status",
+  inventory: "inventory",
+  inv: "inventory",
+  i: "inventory",
+  "소지품": "inventory",
+  "인벤토리": "inventory",
   wait: "wait",
   "기다려": "wait",
   help: "help",
@@ -55,6 +60,7 @@ const state = {
   hp: 80,
   mp: 50,
   st: 70,
+  inventory: [],
   content: [],
   candidateHitboxes: [],
   candidateRow: 0,
@@ -240,6 +246,11 @@ function runBuiltIn(id) {
     return;
   }
 
+  if (id === "inventory") {
+    addLog("system", inventorySummary());
+    return;
+  }
+
   if (id === "wait") {
     state.st = clamp(state.st + 5, 0, maxStats.st);
     addLog("world", "잠시 기다린다.");
@@ -249,7 +260,7 @@ function runBuiltIn(id) {
   }
 
   if (id === "help") {
-    addLog("system", "verbs: 가, 살펴봐, 먹어, 쓰다듬어, 기다려");
+    addLog("system", "verbs: 가, 살펴봐, 먹어, 쓰다듬어, 기다려, 상태, 소지품");
     addLog("system", `places: ${currentRoom().links.map((link) => linkTargetName(link)).join(", ")}`);
     addLog("system", "movement: `<장소>로 가`, `가 <장소>`.");
     return;
@@ -597,6 +608,7 @@ function actionCandidates(query) {
     candidate("살펴봐", "살펴봐"),
     candidate("기다려", "기다려"),
     candidate("상태", "상태"),
+    candidate("소지품", "소지품"),
     candidate("도움", "도움")
   ].filter((item) => includesQuery(item.searchText, query));
 }
@@ -728,6 +740,7 @@ function renderPlaceRows(snapshot, cols) {
   const actorTerms = termsFor(snapshot.actors);
   const linkTerms = snapshot.links.flatMap((link) => [link.name, ...link.aliases]);
   const rows = [
+    { kind: "normal", text: "" },
     { kind: "placeTitle", text: snapshot.name },
     { kind: "normal", text: "" },
     ...highlightedRows(snapshot.description, objectTerms, "object", cols)
@@ -761,6 +774,11 @@ function linkSummary(roomOrSnapshot) {
 
 function statusSummary() {
   return `HP ${state.hp}/${maxStats.hp}  MP ${state.mp}/${maxStats.mp}  STA ${state.st}/${maxStats.st}  LOC ${currentRoom().name}`;
+}
+
+function inventorySummary() {
+  if (!state.inventory.length) return "소지품: 없음";
+  return `소지품: ${state.inventory.map((item) => item.name).join(", ")}`;
 }
 
 function statusBar(cols) {

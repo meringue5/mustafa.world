@@ -52,6 +52,8 @@ DOM/CSS는 다음 용도까지 허용한다.
 -   GitHub Pages source는 `GitHub Actions`로 유지한다. `main / root` branch deploy로 바꾸지 않는다.
 -   `dist/`, `node_modules/`, `.publish/`는 commit하지 않는다.
 -   `.publish/`는 이 작업 환경에서 원격 push가 필요할 때 쓰는 임시 clone일 뿐 canonical source가 아니다.
+-   `git push`는 곧 GitHub Pages 배포를 의미한다. 사용자가 해당 턴에서 명시적으로 요청하기 전에는 push하지 않는다.
+-   문서 수정, 코드 수정, 로컬 빌드 검증은 push 요청으로 해석하지 않는다.
 
 ## 커맨드 컴포저 원칙
 

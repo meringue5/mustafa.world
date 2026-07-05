@@ -6,6 +6,16 @@
   font-display: swap;
 }
 
+:root {
+  --terminal-cols: 132;
+  --terminal-rows: 50;
+  --terminal-cell-width: 9px;
+  --terminal-cell-height: 15px;
+  --terminal-padding-x: 16px;
+  --terminal-padding-y: 14px;
+  --terminal-scale: 1;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -26,15 +36,33 @@ body {
   letter-spacing: 0;
 }
 
-#terminal {
+#stage {
   width: 100%;
   height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+#terminal-frame {
+  width: calc(var(--terminal-cols) * var(--terminal-cell-width) + var(--terminal-padding-x) * 2);
+  height: calc(var(--terminal-rows) * var(--terminal-cell-height) + var(--terminal-padding-y) * 2);
+  overflow: hidden;
+  background: #000000;
+  transform: scale(var(--terminal-scale));
+  transform-origin: center;
+}
+
+#terminal {
+  width: 100%;
+  height: 100%;
 }
 
 .xterm {
+  width: 100%;
   height: 100%;
   font-feature-settings: "ss01" 1;
-  padding: 14px 16px;
+  padding: var(--terminal-padding-y) var(--terminal-padding-x);
 }
 
 .xterm-viewport {
