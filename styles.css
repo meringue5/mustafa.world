@@ -3,7 +3,7 @@
   src: url("https://cdn.jsdelivr.net/gh/JuwanPark/IyagiGGC@latest/IyagiGGCHalf.woff") format("woff");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 :root {
@@ -11,6 +11,8 @@
   --terminal-rows: 50;
   --terminal-cell-width: 9px;
   --terminal-cell-height: 15px;
+  --terminal-frame-width: 1220px;
+  --terminal-frame-height: 930px;
   --terminal-padding-x: 16px;
   --terminal-padding-y: 14px;
   --terminal-scale: 1;
@@ -45,12 +47,17 @@ body {
 }
 
 #terminal-frame {
-  width: calc(var(--terminal-cols) * var(--terminal-cell-width) + var(--terminal-padding-x) * 2);
-  height: calc(var(--terminal-rows) * var(--terminal-cell-height) + var(--terminal-padding-y) * 2);
+  width: var(--terminal-frame-width);
+  height: var(--terminal-frame-height);
   overflow: hidden;
   background: #000000;
+  opacity: 0;
   transform: scale(var(--terminal-scale));
   transform-origin: center;
+}
+
+#terminal-frame.is-ready {
+  opacity: 1;
 }
 
 #terminal {

@@ -6,9 +6,15 @@ const terminalElement = document.querySelector("#terminal");
 const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace';
 const TERMINAL_COLS = 132;
 const TERMINAL_ROWS = 50;
-const TERMINAL_FRAME_WIDTH = 1220;
-const TERMINAL_FRAME_HEIGHT = 778;
+const FALLBACK_FRAME_WIDTH = 1220;
+const FALLBACK_FRAME_HEIGHT = 930;
 const STAGE_MARGIN = 32;
+const FONT_LOAD_TIMEOUT_MS = 3000;
+let terminalFrameSize = {
+  width: FALLBACK_FRAME_WIDTH,
+  height: FALLBACK_FRAME_HEIGHT
+};
+const terminalFrameElement = document.querySelector("#terminal-frame");
 
 const terminal = new Terminal({
   allowTransparency: false,
@@ -50,23 +56,77 @@ const terminal = new Terminal({
   }
 });
 
+await waitForTerminalFont();
 terminal.open(terminalElement);
 terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
 
 function updateStageScale() {
-  const widthScale = (window.innerWidth - STAGE_MARGIN) / TERMINAL_FRAME_WIDTH;
-  const heightScale = (window.innerHeight - STAGE_MARGIN) / TERMINAL_FRAME_HEIGHT;
+  const widthScale = (window.innerWidth - STAGE_MARGIN) / terminalFrameSize.width;
+  const heightScale = (window.innerHeight - STAGE_MARGIN) / terminalFrameSize.height;
   const scale = Math.min(widthScale, heightScale, 1);
   document.documentElement.style.setProperty("--terminal-scale", String(Math.max(scale, 0.45)));
 }
 
-updateStageScale();
-window.addEventListener("resize", updateStageScale);
-
-document.fonts?.ready.then(() => {
+function syncTerminalFrame() {
   terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
+
+  const xtermElement = terminalElement.querySelector(".xterm");
+  const screenElement = terminalElement.querySelector(".xterm-screen");
+  if (!xtermElement || !screenElement) {
+    updateStageScale();
+    return;
+  }
+
+  const xtermStyle = getComputedStyle(xtermElement);
+  const paddingX = parseFloat(xtermStyle.paddingLeft) + parseFloat(xtermStyle.paddingRight);
+  const paddingY = parseFloat(xtermStyle.paddingTop) + parseFloat(xtermStyle.paddingBottom);
+  const width = Math.ceil(screenElement.offsetWidth + paddingX);
+  const height = Math.ceil(screenElement.offsetHeight + paddingY);
+
+  if (width > 0 && height > 0) {
+    terminalFrameSize = { width, height };
+    document.documentElement.style.setProperty("--terminal-frame-width", `${width}px`);
+    document.documentElement.style.setProperty("--terminal-frame-height", `${height}px`);
+  }
+
   updateStageScale();
   terminal.refresh(0, terminal.rows - 1);
+}
+
+function scheduleTerminalFrameSync({ reveal = false } = {}) {
+  requestAnimationFrame(() => {
+    syncTerminalFrame();
+    requestAnimationFrame(() => {
+      syncTerminalFrame();
+      if (reveal) terminalFrameElement?.classList.add("is-ready");
+    });
+  });
+}
+
+scheduleTerminalFrameSync({ reveal: true });
+window.addEventListener("resize", () => {
+  updateStageScale();
+  requestAnimationFrame(syncTerminalFrame);
+});
+
+document.fonts?.ready.then(() => {
+  scheduleTerminalFrameSync();
 });
 
 startWorld(terminal);
+
+async function waitForTerminalFont() {
+  if (!document.fonts?.load) return;
+
+  try {
+    await Promise.race([
+      Promise.all([
+        document.fonts.load('15px "IyagiGGCHalf"'),
+        document.fonts.ready
+      ]),
+      new Promise((resolve) => setTimeout(resolve, FONT_LOAD_TIMEOUT_MS))
+    ]);
+  } catch {
+    // If the webfont fails, keep the app usable with the fallback monospace stack.
+  }
+}
