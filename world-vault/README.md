@@ -20,6 +20,8 @@ Obsidian의 Templates folder location은 `_templates`로 설정한다.
 
 `_references/link-patterns.md`는 템플릿으로 삽입하기보다, 링크를 작성할 때 참고하는 패턴 사전이다.
 
+`_references/entity-patterns.md`는 사물과 행위자를 작성할 때 참고하는 패턴 사전이다.
+
 ## 앱 반영
 
 앱에서 사용하는 장소 데이터의 기준은 `rooms/**/*.md`다.
@@ -37,3 +39,12 @@ src/generated/world.json
 ```
 
 앱의 현재 시작 위치는 `home.study`다.
+
+## 엔티티 작성 규칙
+
+장소 파일의 frontmatter에 있는 `objects`와 `actors`가 앱의 후보 추천과 하이라이트 기준이다.
+
+-   사용자가 직접 입력할 수 있어야 하는 명사는 `objects` 또는 `actors`에 명시한다.
+-   `aliases`는 같은 대상을 부르는 다른 이름만 적는다.
+-   포함물, 부품, 위에 놓인 물건은 alias가 아니라 별도 object로 분리한다.
+-   예: `책장`의 alias에 `책`을 넣지 않는다. `책장`과 `책`은 별도 object다.

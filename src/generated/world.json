@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-05T11:03:57.441Z",
+  "generatedAt": "2026-07-05T11:24:22.846Z",
   "startRoom": "home.study",
   "rooms": {
     "home.bedroom": {
@@ -506,10 +506,23 @@
           "id": "bookshelf",
           "name": "책장",
           "aliases": [
-            "책장",
-            "책"
+            "책장"
           ],
-          "tags": []
+          "tags": [
+            "furniture",
+            "container"
+          ]
+        },
+        {
+          "id": "book",
+          "name": "책",
+          "aliases": [
+            "책",
+            "읽다 만 책"
+          ],
+          "tags": [
+            "readable"
+          ]
         }
       ],
       "actors": [

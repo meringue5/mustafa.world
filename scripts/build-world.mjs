@@ -45,6 +45,8 @@ for (const filePath of files) {
 }
 
 for (const room of Object.values(rooms)) {
+  validateEntitySurfaces(room);
+
   for (const link of room.links) {
     if (!rooms[link.to]) {
       errors.push(`${room.source}: link target does not exist: ${link.to}`);
@@ -171,6 +173,29 @@ function normalizeActors(actors, filePath) {
   });
 }
 
+function validateEntitySurfaces(room) {
+  const seen = new Map();
+  const entities = [
+    ...(room.objects ?? []).map((entity) => ({ ...entity, kind: "object" })),
+    ...(room.actors ?? []).map((entity) => ({ ...entity, kind: "actor" }))
+  ];
+
+  for (const entity of entities) {
+    const surfaces = [entity.name, ...(entity.aliases ?? [])].map(normalizeText).filter(Boolean);
+
+    for (const surface of surfaces) {
+      const previous = seen.get(surface);
+      if (previous && previous.id !== entity.id) {
+        errors.push(
+          `${room.source}: entity surface "${surface}" is used by both ${previous.kind}:${previous.id} and ${entity.kind}:${entity.id}`
+        );
+      } else {
+        seen.set(surface, entity);
+      }
+    }
+  }
+}
+
 function section(body, heading) {
   const lines = body.split(/\r?\n/);
   const start = lines.findIndex((line) => line.trim() === `## ${heading}`);
@@ -187,4 +212,8 @@ function section(body, heading) {
 
 function relative(filePath) {
   return path.relative(root, filePath);
+}
+
+function normalizeText(text) {
+  return String(text ?? "").trim().replace(/\s+/g, " ");
 }

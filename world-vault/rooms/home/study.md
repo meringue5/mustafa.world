@@ -14,7 +14,12 @@ objects:
     aliases: [노트북, 컴퓨터]
   - id: bookshelf
     name: 책장
-    aliases: [책장, 책]
+    aliases: [책장]
+    tags: [furniture, container]
+  - id: book
+    name: 책
+    aliases: [책, 읽다 만 책]
+    tags: [readable]
 
 actors:
   - id: noa
