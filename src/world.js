@@ -213,7 +213,6 @@ function handleTerminalPointer(event) {
   }
 
   term.focus();
-  if (event.pointerType !== "mouse") event.preventDefault();
 }
 
 function selectCandidateFromEvent(event) {

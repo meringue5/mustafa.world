@@ -39,7 +39,7 @@ body {
   font-family: "IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
   font-feature-settings: "ss01" 1;
   letter-spacing: 0;
-  touch-action: none;
+  touch-action: manipulation;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -65,7 +65,7 @@ body {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
-  touch-action: none;
+  touch-action: manipulation;
   will-change: transform;
 }
 
@@ -76,7 +76,7 @@ body {
 #terminal {
   width: 100%;
   height: 100%;
-  touch-action: none;
+  touch-action: manipulation;
 }
 
 .xterm {
@@ -86,7 +86,7 @@ body {
   padding: var(--terminal-padding-y) var(--terminal-padding-x);
   user-select: none;
   -webkit-user-select: none;
-  touch-action: none;
+  touch-action: manipulation;
 }
 
 .xterm-viewport {
