@@ -73,5 +73,10 @@ body {
 }
 
 .xterm-viewport {
-  scrollbar-width: thin;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+  display: none;
 }

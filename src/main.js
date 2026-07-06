@@ -4,8 +4,12 @@ import { startWorld } from "./world.js";
 
 const terminalElement = document.querySelector("#terminal");
 const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace';
-const TERMINAL_COLS = 132;
-const TERMINAL_ROWS = 50;
+const TERMINAL_PROFILE = {
+  cols: 132,
+  rows: 50,
+  minScale: 0.45,
+  maxScale: 1.2
+};
 const FALLBACK_FRAME_WIDTH = 1220;
 const FALLBACK_FRAME_HEIGHT = 930;
 const STAGE_MARGIN = 32;
@@ -18,7 +22,7 @@ const terminalFrameElement = document.querySelector("#terminal-frame");
 
 const terminal = new Terminal({
   allowTransparency: false,
-  cols: TERMINAL_COLS,
+  cols: TERMINAL_PROFILE.cols,
   convertEol: false,
   customGlyphs: false,
   cursorBlink: true,
@@ -30,7 +34,7 @@ const terminal = new Terminal({
   fontWeightBold: "normal",
   letterSpacing: 0,
   lineHeight: 1,
-  rows: TERMINAL_ROWS,
+  rows: TERMINAL_PROFILE.rows,
   scrollback: 0,
   theme: {
     background: "#000000",
@@ -58,17 +62,17 @@ const terminal = new Terminal({
 
 await waitForTerminalFont();
 terminal.open(terminalElement);
-terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
+terminal.resize(TERMINAL_PROFILE.cols, TERMINAL_PROFILE.rows);
 
 function updateStageScale() {
   const widthScale = (window.innerWidth - STAGE_MARGIN) / terminalFrameSize.width;
   const heightScale = (window.innerHeight - STAGE_MARGIN) / terminalFrameSize.height;
-  const scale = Math.min(widthScale, heightScale, 1);
-  document.documentElement.style.setProperty("--terminal-scale", String(Math.max(scale, 0.45)));
+  const scale = Math.min(widthScale, heightScale, TERMINAL_PROFILE.maxScale);
+  document.documentElement.style.setProperty("--terminal-scale", String(Math.max(scale, TERMINAL_PROFILE.minScale)));
 }
 
 function syncTerminalFrame() {
-  terminal.resize(TERMINAL_COLS, TERMINAL_ROWS);
+  terminal.resize(TERMINAL_PROFILE.cols, TERMINAL_PROFILE.rows);
 
   const xtermElement = terminalElement.querySelector(".xterm");
   const screenElement = terminalElement.querySelector(".xterm-screen");
