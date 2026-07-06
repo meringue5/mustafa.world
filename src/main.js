@@ -4,25 +4,34 @@ import { startWorld } from "./world.js";
 
 const terminalElement = document.querySelector("#terminal");
 const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace';
-const TERMINAL_PROFILE = {
-  cols: 132,
-  rows: 50,
-  minScale: 0.45,
-  maxScale: 1.2
+const TERMINAL_PROFILES = {
+  desktop: {
+    id: "desktop",
+    cols: 132,
+    rows: 50,
+    minScale: 0.45,
+    maxScale: 1.2,
+    stageMargin: 32,
+    fallbackFrame: { width: 1220, height: 930 }
+  },
+  compact: {
+    id: "compact",
+    cols: 80,
+    rows: 40,
+    minScale: 0.42,
+    maxScale: 1.1,
+    stageMargin: 12,
+    fallbackFrame: { width: 752, height: 748 }
+  }
 };
-const FALLBACK_FRAME_WIDTH = 1220;
-const FALLBACK_FRAME_HEIGHT = 930;
-const STAGE_MARGIN = 32;
 const FONT_LOAD_TIMEOUT_MS = 3000;
-let terminalFrameSize = {
-  width: FALLBACK_FRAME_WIDTH,
-  height: FALLBACK_FRAME_HEIGHT
-};
 const terminalFrameElement = document.querySelector("#terminal-frame");
+let activeProfile = selectTerminalProfile();
+let terminalFrameSize = { ...activeProfile.fallbackFrame };
 
 const terminal = new Terminal({
   allowTransparency: false,
-  cols: TERMINAL_PROFILE.cols,
+  cols: activeProfile.cols,
   convertEol: false,
   customGlyphs: false,
   cursorBlink: true,
@@ -34,7 +43,7 @@ const terminal = new Terminal({
   fontWeightBold: "normal",
   letterSpacing: 0,
   lineHeight: 1,
-  rows: TERMINAL_PROFILE.rows,
+  rows: activeProfile.rows,
   scrollback: 0,
   theme: {
     background: "#000000",
@@ -61,18 +70,22 @@ const terminal = new Terminal({
 });
 
 await waitForTerminalFont();
+syncVisualViewportProperties();
+syncProfileProperties();
 terminal.open(terminalElement);
-terminal.resize(TERMINAL_PROFILE.cols, TERMINAL_PROFILE.rows);
+terminal.resize(activeProfile.cols, activeProfile.rows);
 
 function updateStageScale() {
-  const widthScale = (window.innerWidth - STAGE_MARGIN) / terminalFrameSize.width;
-  const heightScale = (window.innerHeight - STAGE_MARGIN) / terminalFrameSize.height;
-  const scale = Math.min(widthScale, heightScale, TERMINAL_PROFILE.maxScale);
-  document.documentElement.style.setProperty("--terminal-scale", String(Math.max(scale, TERMINAL_PROFILE.minScale)));
+  const viewport = syncVisualViewportProperties();
+  const widthScale = Math.max(viewport.width - activeProfile.stageMargin, 1) / terminalFrameSize.width;
+  const heightScale = Math.max(viewport.height - activeProfile.stageMargin, 1) / terminalFrameSize.height;
+  const fitScale = Math.min(widthScale, heightScale);
+  const scale = fitScale < activeProfile.minScale ? fitScale : Math.min(fitScale, activeProfile.maxScale);
+  document.documentElement.style.setProperty("--terminal-scale", String(scale));
 }
 
 function syncTerminalFrame() {
-  terminal.resize(TERMINAL_PROFILE.cols, TERMINAL_PROFILE.rows);
+  applyTerminalProfile();
 
   const xtermElement = terminalElement.querySelector(".xterm");
   const screenElement = terminalElement.querySelector(".xterm-screen");
@@ -109,8 +122,13 @@ function scheduleTerminalFrameSync({ reveal = false } = {}) {
 
 scheduleTerminalFrameSync({ reveal: true });
 window.addEventListener("resize", () => {
+  scheduleTerminalFrameSync();
+});
+window.visualViewport?.addEventListener("resize", () => {
+  scheduleTerminalFrameSync();
+});
+window.visualViewport?.addEventListener("scroll", () => {
   updateStageScale();
-  requestAnimationFrame(syncTerminalFrame);
 });
 
 document.fonts?.ready.then(() => {
@@ -133,4 +151,47 @@ async function waitForTerminalFont() {
   } catch {
     // If the webfont fails, keep the app usable with the fallback monospace stack.
   }
+}
+
+function applyTerminalProfile() {
+  const nextProfile = selectTerminalProfile();
+  if (nextProfile.id === activeProfile.id && terminal.cols === nextProfile.cols && terminal.rows === nextProfile.rows) {
+    return;
+  }
+
+  activeProfile = nextProfile;
+  terminalFrameSize = { ...activeProfile.fallbackFrame };
+  syncProfileProperties();
+  terminal.resize(activeProfile.cols, activeProfile.rows);
+}
+
+function selectTerminalProfile() {
+  const viewport = viewportSize();
+  if (viewport.width < 720 || viewport.height < 560) {
+    return TERMINAL_PROFILES.compact;
+  }
+  return TERMINAL_PROFILES.desktop;
+}
+
+function syncProfileProperties() {
+  document.documentElement.style.setProperty("--terminal-cols", String(activeProfile.cols));
+  document.documentElement.style.setProperty("--terminal-rows", String(activeProfile.rows));
+  document.documentElement.style.setProperty("--terminal-frame-width", `${terminalFrameSize.width}px`);
+  document.documentElement.style.setProperty("--terminal-frame-height", `${terminalFrameSize.height}px`);
+  terminalFrameElement?.setAttribute("aria-label", `${activeProfile.cols} by ${activeProfile.rows} terminal frame`);
+}
+
+function syncVisualViewportProperties() {
+  const viewport = viewportSize();
+  document.documentElement.style.setProperty("--visual-viewport-width", `${viewport.width}px`);
+  document.documentElement.style.setProperty("--visual-viewport-height", `${viewport.height}px`);
+  return viewport;
+}
+
+function viewportSize() {
+  const visualViewport = window.visualViewport;
+  return {
+    width: visualViewport?.width ?? window.innerWidth,
+    height: visualViewport?.height ?? window.innerHeight
+  };
 }

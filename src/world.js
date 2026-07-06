@@ -75,7 +75,7 @@ export function startWorld(xterm) {
   appendPlaceSnapshot();
   term.onData(handleData);
   term.onResize(render);
-  term.element?.addEventListener("click", handleTerminalClick);
+  term.element?.addEventListener("pointerdown", handleTerminalPointer, { passive: false });
   render();
   term.focus();
 }
@@ -203,17 +203,30 @@ function runCommand(command) {
   }
 }
 
-function handleTerminalClick(event) {
+function handleTerminalPointer(event) {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+
+  const handled = selectCandidateFromEvent(event);
+  if (handled) {
+    event.preventDefault();
+    return;
+  }
+
+  term.focus();
+  if (event.pointerType !== "mouse") event.preventDefault();
+}
+
+function selectCandidateFromEvent(event) {
   const cell = terminalCellFromEvent(event);
-  if (!cell || cell.row !== state.candidateRow) return;
+  if (!cell || cell.row !== state.candidateRow) return false;
 
   const hitbox = state.candidateHitboxes.find((box) => cell.col >= box.start && cell.col <= box.end);
-  if (!hitbox) return;
+  if (!hitbox) return false;
 
-  event.preventDefault();
   term.focus();
   state.selected = hitbox.index;
   acceptSuggestion();
+  return true;
 }
 
 function terminalCellFromEvent(event) {
