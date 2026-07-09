@@ -7,21 +7,28 @@ const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Co
 const TERMINAL_PROFILES = {
   desktop: {
     id: "desktop",
+    layout: "scaled",
     cols: 132,
     rows: 50,
     minScale: 0.45,
     maxScale: 1.2,
     stageMargin: 32,
+    paddingX: 16,
+    paddingY: 14,
     fallbackFrame: { width: 1220, height: 930 }
   },
-  compact: {
-    id: "compact",
+  mobile: {
+    id: "mobile",
+    layout: "fit",
     cols: 80,
     rows: 40,
-    minScale: 0.42,
-    maxScale: 1.1,
-    stageMargin: 12,
-    fallbackFrame: { width: 752, height: 748 }
+    minCols: 36,
+    minRows: 12,
+    maxCols: 100,
+    maxRows: 80,
+    paddingX: 8,
+    paddingY: 8,
+    fallbackFrame: { width: 390, height: 844 }
   }
 };
 const FONT_LOAD_TIMEOUT_MS = 3000;
@@ -73,10 +80,19 @@ await waitForTerminalFont();
 syncVisualViewportProperties();
 syncProfileProperties();
 terminal.open(terminalElement);
+prepareTerminalTextArea();
 terminal.resize(activeProfile.cols, activeProfile.rows);
 
 function updateStageScale() {
   const viewport = syncVisualViewportProperties();
+  if (activeProfile.layout === "fit") {
+    terminalFrameSize = { width: viewport.width, height: viewport.height };
+    document.documentElement.style.setProperty("--terminal-frame-width", `${terminalFrameSize.width}px`);
+    document.documentElement.style.setProperty("--terminal-frame-height", `${terminalFrameSize.height}px`);
+    document.documentElement.style.setProperty("--terminal-scale", "1");
+    return;
+  }
+
   const widthScale = Math.max(viewport.width - activeProfile.stageMargin, 1) / terminalFrameSize.width;
   const heightScale = Math.max(viewport.height - activeProfile.stageMargin, 1) / terminalFrameSize.height;
   const fitScale = Math.min(widthScale, heightScale);
@@ -91,6 +107,11 @@ function syncTerminalFrame() {
   const screenElement = terminalElement.querySelector(".xterm-screen");
   if (!xtermElement || !screenElement) {
     updateStageScale();
+    return;
+  }
+
+  if (activeProfile.layout === "fit") {
+    syncFittedTerminalFrame(xtermElement, screenElement);
     return;
   }
 
@@ -155,7 +176,10 @@ async function waitForTerminalFont() {
 
 function applyTerminalProfile() {
   const nextProfile = selectTerminalProfile();
-  if (nextProfile.id === activeProfile.id && terminal.cols === nextProfile.cols && terminal.rows === nextProfile.rows) {
+  if (nextProfile.id === activeProfile.id) {
+    if (activeProfile.layout === "scaled" && (terminal.cols !== activeProfile.cols || terminal.rows !== activeProfile.rows)) {
+      terminal.resize(activeProfile.cols, activeProfile.rows);
+    }
     return;
   }
 
@@ -168,14 +192,17 @@ function applyTerminalProfile() {
 function selectTerminalProfile() {
   const viewport = viewportSize();
   if (viewport.width < 720 || viewport.height < 560) {
-    return TERMINAL_PROFILES.compact;
+    return TERMINAL_PROFILES.mobile;
   }
   return TERMINAL_PROFILES.desktop;
 }
 
 function syncProfileProperties() {
+  terminalFrameElement?.classList.toggle("is-fit", activeProfile.layout === "fit");
   document.documentElement.style.setProperty("--terminal-cols", String(activeProfile.cols));
   document.documentElement.style.setProperty("--terminal-rows", String(activeProfile.rows));
+  document.documentElement.style.setProperty("--terminal-padding-x", `${activeProfile.paddingX}px`);
+  document.documentElement.style.setProperty("--terminal-padding-y", `${activeProfile.paddingY}px`);
   document.documentElement.style.setProperty("--terminal-frame-width", `${terminalFrameSize.width}px`);
   document.documentElement.style.setProperty("--terminal-frame-height", `${terminalFrameSize.height}px`);
   terminalFrameElement?.setAttribute("aria-label", `${activeProfile.cols} by ${activeProfile.rows} terminal frame`);
@@ -194,4 +221,54 @@ function viewportSize() {
     width: visualViewport?.width ?? window.innerWidth,
     height: visualViewport?.height ?? window.innerHeight
   };
+}
+
+function prepareTerminalTextArea() {
+  const textarea = terminal.textarea;
+  if (!textarea) return;
+
+  textarea.autocomplete = "off";
+  textarea.autocapitalize = "off";
+  textarea.spellcheck = false;
+  textarea.setAttribute("inputmode", "text");
+}
+
+function syncFittedTerminalFrame(xtermElement, screenElement) {
+  const viewport = syncVisualViewportProperties();
+  const xtermStyle = getComputedStyle(xtermElement);
+  const paddingX = parseFloat(xtermStyle.paddingLeft) + parseFloat(xtermStyle.paddingRight);
+  const paddingY = parseFloat(xtermStyle.paddingTop) + parseFloat(xtermStyle.paddingBottom);
+  const cellWidth = screenElement.offsetWidth / Math.max(terminal.cols, 1);
+  const cellHeight = screenElement.offsetHeight / Math.max(terminal.rows, 1);
+
+  terminalFrameSize = { width: viewport.width, height: viewport.height };
+  document.documentElement.style.setProperty("--terminal-frame-width", `${terminalFrameSize.width}px`);
+  document.documentElement.style.setProperty("--terminal-frame-height", `${terminalFrameSize.height}px`);
+  document.documentElement.style.setProperty("--terminal-scale", "1");
+
+  if (cellWidth > 0 && cellHeight > 0) {
+    const cols = clamp(
+      Math.floor(Math.max(viewport.width - paddingX, 1) / cellWidth),
+      activeProfile.minCols,
+      activeProfile.maxCols
+    );
+    const rows = clamp(
+      Math.floor(Math.max(viewport.height - paddingY, 1) / cellHeight),
+      activeProfile.minRows,
+      activeProfile.maxRows
+    );
+
+    if (cols !== terminal.cols || rows !== terminal.rows) {
+      terminal.resize(cols, rows);
+      document.documentElement.style.setProperty("--terminal-cols", String(cols));
+      document.documentElement.style.setProperty("--terminal-rows", String(rows));
+      terminalFrameElement?.setAttribute("aria-label", `${cols} by ${rows} terminal frame`);
+    }
+  }
+
+  terminal.refresh(0, terminal.rows - 1);
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
 }

@@ -76,6 +76,8 @@ export function startWorld(xterm) {
   term.onData(handleData);
   term.onResize(render);
   term.element?.addEventListener("pointerdown", handleTerminalPointer, { passive: false });
+  term.element?.addEventListener("pointerup", focusTerminalFromPointer);
+  term.element?.addEventListener("click", focusTerminalFromPointer);
   render();
   term.focus();
 }
@@ -212,6 +214,11 @@ function handleTerminalPointer(event) {
     return;
   }
 
+  term.focus();
+}
+
+function focusTerminalFromPointer(event) {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
   term.focus();
 }
 
