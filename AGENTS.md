@@ -12,15 +12,16 @@ DOM/CSS는 다음 용도까지 허용한다.
 -   폰트 로딩
 -   viewport 크기 조정
 
-현재 월드 데이터의 저작 원본은 `world-vault/` 아래의 Obsidian 스타일 vault다. 런타임은 `src/generated/world.json`을 사용한다.
+현재 월드 데이터의 저작 원본은 `world-vault/` 아래의 Obsidian 스타일 vault다. 런타임은 `src/generated/world-data.js`를 사용하고, 도구용 JSON은 `src/generated/world.json`에 함께 생성한다.
 
 ## 명령
 
 -   월드 데이터 빌드: `npm run build:world`
--   개발 서버: `npm run dev -- --port 5173`
--   프로덕션 빌드: `npm run build`
+-   배포 산출물 빌드: `npm run build`
 
-`npm run dev`와 `npm run build`는 먼저 `build:world`를 실행한다. 로컬 확인 URL은 기본적으로 `http://127.0.0.1:5173/`를 사용한다. 예전 Vite 서버가 같은 포트에 남아 있으면 먼저 종료하고 새 서버를 띄운다.
+평소 개발은 루트 `index.html`을 브라우저에서 직접 연다. 소스/문서만 바꾼 경우 개발 서버나 프로덕션 빌드를 자동으로 실행하지 않는다. 월드 원본이나 생성기 변경에는 `npm run build:world`를 실행하고, push/배포 전에는 `npm run build`로 `dist/`를 검증한다.
+
+HTTP 서버가 필요한 브라우저 동작을 확인할 때만 사용자가 명시적으로 요청한 뒤 서버를 띄운다. 새 서버를 띄우기 전에는 기존 프로세스와 포트를 확인하고, 이미 맞는 서버가 있으면 재사용한다.
 
 ## 설계 문서 규칙
 
@@ -47,10 +48,11 @@ DOM/CSS는 다음 용도까지 허용한다.
 ## 개발/배포 환경
 
 -   자세한 구조는 `docs/design/environment.md`를 따른다.
--   루트 `index.html`은 GitHub Pages가 직접 서빙하는 사용자용 파일이 아니라 Vite entry/template이다.
--   실제 Pages 배포물은 GitHub Actions가 `npm run build`로 생성한 `dist/index.html`이다.
+-   루트 `index.html`과 상대 경로 자산은 빌드 없이 직접 실행 가능한 개발용 정적 앱이다.
+-   실제 Pages 배포물은 GitHub Actions가 `npm run build`로 검증하고 `dist/`에 조립한 같은 정적 앱이다.
 -   GitHub Pages source는 `GitHub Actions`로 유지한다. `main / root` branch deploy로 바꾸지 않는다.
 -   `dist/`, `node_modules/`, `.publish/`는 commit하지 않는다.
+-   `vendor/`의 브라우저 런타임과 `src/generated/world-data.js`, `src/generated/world.json`은 commit한다.
 -   `.publish/`는 이 작업 환경에서 원격 push가 필요할 때 쓰는 임시 clone일 뿐 canonical source가 아니다.
 -   `git push`는 곧 GitHub Pages 배포를 의미한다. 사용자가 해당 턴에서 명시적으로 요청하기 전에는 push하지 않는다.
 -   문서 수정, 코드 수정, 로컬 빌드 검증은 push 요청으로 해석하지 않는다.

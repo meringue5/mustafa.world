@@ -36,6 +36,7 @@ world-vault/**/*.md
 world-vault/ontology/**/*.yaml
   -> scripts/build-world.mjs
   -> src/generated/world.json
+  -> src/generated/world-data.js
 ```
 
 정통 온톨로지 도구는 당장 도입하지 않는다. Protégé, RDF, OWL, SPARQL/Fuseki 같은 도구는 다음 조건이 생기면 검토한다.

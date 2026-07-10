@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>mustafa_world tui</title>
+    <link rel="stylesheet" href="./vendor/xterm/xterm.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,6 +13,10 @@
         <div id="terminal" aria-label="mustafa_world terminal"></div>
       </section>
     </main>
-    <script type="module" src="/src/main.js"></script>
+    <script src="./vendor/xterm/xterm.js"></script>
+    <script src="./src/generated/world-data.js"></script>
+    <script src="./src/terminal-ui.js"></script>
+    <script src="./src/world.js"></script>
+    <script src="./src/main.js"></script>
   </body>
 </html>

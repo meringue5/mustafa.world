@@ -1,6 +1,8 @@
-import { Terminal } from "@xterm/xterm";
-import "@xterm/xterm/css/xterm.css";
-import { startWorld } from "./world.js";
+(async function bootstrap(global) {
+"use strict";
+
+const { Terminal } = global;
+const { startWorld } = global.MustafaWorld;
 
 const terminalElement = document.querySelector("#terminal");
 const fontFamily = '"IyagiGGCHalf", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace';
@@ -272,3 +274,4 @@ function syncFittedTerminalFrame(xtermElement, screenElement) {
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
+})(globalThis);

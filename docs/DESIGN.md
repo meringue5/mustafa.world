@@ -462,18 +462,17 @@ Vault 내부에서 `_templates/`는 Obsidian Templates 플러그인으로 삽입
 
 온톨로지 데이터도 우선 `world-vault/` 안에서 작성한다. 별도 전문 온톨로지 툴을 바로 도입하지 않고, `Obsidian-first, export-later` 방침을 따른다. 자세한 내용은 [`docs/design/ontology.md`](design/ontology.md)에 둔다.
 
-앱 런타임은 Markdown 파일을 직접 해석하지 않고, 컴파일된 JSON 그래프를 사용한다.
+앱 런타임은 Markdown 파일을 직접 해석하지 않고, 브라우저 스크립트로 컴파일된 그래프를 사용한다. 같은 데이터의 JSON도 도구용으로 유지한다. 개발/배포 실행 방침은 [`docs/design/environment.md`](design/environment.md)에 둔다.
 
 ```text
 world-vault/rooms/**/*.md
   -> scripts/build-world.mjs
   -> src/generated/world.json
+  -> src/generated/world-data.js
   -> src/world.js
 ```
 
-`npm run build:world`는 vault의 장소 Markdown을 읽어 `src/generated/world.json`을 생성한다.
-
-`npm run dev`와 `npm run build`는 실행 전에 `build:world`를 수행한다.
+`npm run build:world`는 vault의 장소 Markdown을 읽어 JSON과 브라우저용 JS 데이터를 함께 생성한다.
 
 현재 시작 위치는 `home.study`다.
 
@@ -746,12 +745,13 @@ recipient: ?
 예시:
 
 ```text
+주방
 과자 먹어
 노아 쓰다듬어
 주방 가
 ```
 
-이 경우에는 동사 시그니처와 엔티티 태그를 사용해 슬롯을 추론한다.
+현재 장소의 링크 이름이나 alias만 입력하면 이동 affordance를 실행한다. 그 밖의 경우에는 동사 시그니처와 엔티티 태그를 사용해 슬롯을 추론한다.
 
 -   `과자`: `edible`, `portable`
 -   `먹다`: `object` 필요

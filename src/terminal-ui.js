@@ -1,8 +1,11 @@
-export const RESET = "\x1b[0m";
-export const INPUT_ROWS = 5;
+(function registerTerminalUI(global) {
+"use strict";
+
+const RESET = "\x1b[0m";
+const INPUT_ROWS = 5;
 const PANEL_PADDING = 2;
 
-export function renderInputPanel({ cols, statusAnsi, candidates, candidatesAnsi, prompt, spare }) {
+function renderInputPanel({ cols, statusAnsi, candidates, candidatesAnsi, prompt, spare }) {
   const inner = frameInnerWidth(cols);
 
   return [
@@ -14,28 +17,28 @@ export function renderInputPanel({ cols, statusAnsi, candidates, candidatesAnsi,
   ];
 }
 
-export function promptCursorColumn(prompt, cols) {
+function promptCursorColumn(prompt, cols) {
   return Math.min(frameContentColumn(displayWidth(fitText(prompt, frameContentWidth(cols)))), cols);
 }
 
-export function frameInnerWidth(cols) {
+function frameInnerWidth(cols) {
   return Math.max(cols - 2, 1);
 }
 
-export function frameContentWidth(cols) {
+function frameContentWidth(cols) {
   return Math.max(frameInnerWidth(cols) - PANEL_PADDING * 2, 1);
 }
 
-export function frameContentColumn(offset = 0) {
+function frameContentColumn(offset = 0) {
   return PANEL_PADDING + 2 + offset;
 }
 
-export function renderRow(row, cols) {
+function renderRow(row, cols) {
   if (row.ansi) return row.ansi;
   return paint(row.kind, padRight(row.text, cols));
 }
 
-export function highlightedRows(text, terms, tone, cols) {
+function highlightedRows(text, terms, tone, cols) {
   if (!text) return [];
   return wrapText(text, cols).map((line) => {
     const ansi = highlightTerms(line, terms, tone);
@@ -46,7 +49,7 @@ export function highlightedRows(text, terms, tone, cols) {
   });
 }
 
-export function paint(kind, text) {
+function paint(kind, text) {
   const colors = {
     error: "\x1b[31m",
     header: "\x1b[1;37m",
@@ -64,7 +67,7 @@ export function paint(kind, text) {
   return `${colors[kind] ?? ""}${text}${RESET}`;
 }
 
-export function wrapText(text, width) {
+function wrapText(text, width) {
   const lines = [];
   let line = "";
 
@@ -88,7 +91,7 @@ export function wrapText(text, width) {
   return lines.length ? lines : [""];
 }
 
-export function fitText(text, width) {
+function fitText(text, width) {
   let line = "";
   for (const char of Array.from(text)) {
     if (displayWidth(line + char) > width) break;
@@ -97,17 +100,17 @@ export function fitText(text, width) {
   return line;
 }
 
-export function centerText(text, width) {
+function centerText(text, width) {
   const left = Math.max(Math.floor((width - displayWidth(text)) / 2), 0);
   return fitText(`${" ".repeat(left)}${text}${" ".repeat(width)}`, width);
 }
 
-export function padRight(text, width) {
+function padRight(text, width) {
   const fitted = fitText(text, width);
   return `${fitted}${" ".repeat(Math.max(width - displayWidth(fitted), 0))}`;
 }
 
-export function displayWidth(text) {
+function displayWidth(text) {
   return Array.from(text).reduce((total, char) => total + charWidth(char), 0);
 }
 
@@ -184,3 +187,18 @@ function charWidth(char) {
   }
   return 1;
 }
+
+global.MustafaTerminalUI = {
+  INPUT_ROWS,
+  RESET,
+  centerText,
+  displayWidth,
+  frameContentColumn,
+  frameContentWidth,
+  highlightedRows,
+  promptCursorColumn,
+  renderInputPanel,
+  renderRow,
+  wrapText
+};
+})(globalThis);

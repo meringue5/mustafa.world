@@ -1,5 +1,8 @@
-import world from "./generated/world.json";
-import {
+(function registerWorld(global) {
+"use strict";
+
+const world = global.MustafaWorldData;
+const {
   INPUT_ROWS,
   RESET,
   centerText,
@@ -11,7 +14,7 @@ import {
   renderInputPanel,
   renderRow,
   wrapText
-} from "./terminal-ui.js";
+} = global.MustafaTerminalUI;
 
 const CSI = "\x1b[";
 const ALT_SCREEN = "\x1b[?1049h";
@@ -69,7 +72,7 @@ const state = {
 
 let term;
 
-export function startWorld(xterm) {
+function startWorld(xterm) {
   term = xterm;
   term.write(ALT_SCREEN + HIDE_CURSOR);
   appendPlaceSnapshot();
@@ -281,7 +284,7 @@ function runBuiltIn(id) {
   if (id === "help") {
     addLog("system", "verbs: 가, 살펴봐, 먹어, 쓰다듬어, 기다려, 상태, 소지품");
     addLog("system", `places: ${currentRoom().links.map((link) => linkTargetName(link)).join(", ")}`);
-    addLog("system", "movement: `<장소>로 가`, `가 <장소>`.");
+    addLog("system", "movement: `<장소>`, `<장소>로 가`, `가 <장소>`.");
     return;
   }
 
@@ -373,7 +376,7 @@ function parseTargetVerb(command, verbs, particles) {
 function incompleteQuestion(command) {
   const normalized = normalizeSpaces(command);
 
-  if (["가", "이동", "이동해"].includes(normalized) || normalized.startsWith("가 ")) {
+  if (isMoveVerbCommand(normalized)) {
     return "어디로 갈까?";
   }
 
@@ -391,9 +394,7 @@ function incompleteQuestion(command) {
 
 function resolveLink(command) {
   const normalized = normalizeSpaces(command);
-  const moveTarget = moveTargetFromCommand(normalized);
-  if (moveTarget === null) return null;
-
+  const moveTarget = moveTargetFromCommand(normalized) ?? normalized;
   const query = stripDestinationParticle(moveTarget);
 
   return currentRoom().links.find((link) => {
@@ -421,6 +422,10 @@ function moveTargetFromCommand(command) {
   if (spacedMatch) return spacedMatch[1].trim();
 
   return null;
+}
+
+function isMoveVerbCommand(command) {
+  return /^(?:가|이동|이동해)(?:\s|$)/.test(command);
 }
 
 function currentRoom() {
@@ -515,9 +520,10 @@ function suggestionModel() {
 }
 
 function promptForVerb(input) {
-  if (["가", "이동", "이동해"].includes(input) || input.startsWith("가 ")) {
+  if (isMoveVerbCommand(input)) {
     const query = input.replace(/^(?:가|이동|이동해)\s*/, "");
-    return { question: "어디로?", items: linkCandidates(query) };
+    const verb = input.split(" ")[0];
+    return { question: "어디로?", items: linkCandidates(query, { moveVerb: verb }) };
   }
 
   if (["먹어", "먹"].includes(input)) {
@@ -598,14 +604,14 @@ function promptForDestination(input) {
   return null;
 }
 
-function linkCandidates(query) {
+function linkCandidates(query, options = {}) {
   const normalizedQuery = normalizeSpaces(stripDestinationParticle(query));
   return currentRoom().links
     .map((link) => {
       const name = linkTargetName(link);
       return {
         label: name,
-        insertText: `${withDestinationParticle(name)} 가`,
+        insertText: options.moveVerb ? `${options.moveVerb} ${name}` : name,
         searchText: [name, link.label, ...(link.aliases ?? [])].join(" ")
       };
     })
@@ -1049,3 +1055,6 @@ function clamp(value, min, max) {
 function pad(value) {
   return String(value).padStart(2, "0");
 }
+
+global.MustafaWorld = { startWorld };
+})(globalThis);

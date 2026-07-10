@@ -13,7 +13,7 @@
 -   [Actor](actor.md): 행위자, 존재 라인, 이동, 행동, 관계.
 -   [Item](item.md): 사물, 아이템, affordance, 인벤토리 관련 설계.
 -   [Ontology](ontology.md): 태그, 관계, affordance 규칙, 향후 스키마 아이디어.
--   [Environment](environment.md): 개발 서버, Vite entry, 빌드 산출물, GitHub Pages 배포 구조.
+-   [Environment](environment.md): 정적 우선 개발, 배포 빌드, GitHub Pages 배포 구조.
 -   [References](references.md): 고전 interactive fiction, 한국어 MUD client, MUD/MU* client/engine, 어드벤처 복각, parser/world-model 참고 자료.
 
 ## 마이그레이션 규칙

@@ -5,15 +5,10 @@
   "type": "module",
   "scripts": {
     "build:world": "node scripts/build-world.mjs",
-    "predev": "npm run build:world",
-    "dev": "vite --host 127.0.0.1",
-    "prebuild": "npm run build:world",
-    "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "build": "npm run build:world && node scripts/build-site.mjs"
   },
   "dependencies": {
     "@xterm/xterm": "^5.5.0",
-    "vite": "^7.0.0",
     "yaml": "^2.9.0"
   }
 }

@@ -5,6 +5,7 @@ import { parse } from "yaml";
 const root = process.cwd();
 const roomsDir = path.join(root, "world-vault", "rooms");
 const outputPath = path.join(root, "src", "generated", "world.json");
+const browserOutputPath = path.join(root, "src", "generated", "world-data.js");
 
 const files = await listMarkdownFiles(roomsDir);
 const rooms = {};
@@ -61,15 +62,18 @@ if (errors.length) {
 
 const world = {
   schemaVersion: 1,
-  generatedAt: new Date().toISOString(),
   startRoom: "home.study",
   rooms
 };
 
 await mkdir(path.dirname(outputPath), { recursive: true });
-await writeFile(outputPath, `${JSON.stringify(world, null, 2)}\n`, "utf8");
+const serializedWorld = JSON.stringify(world, null, 2);
+await writeFile(outputPath, `${serializedWorld}\n`, "utf8");
+await writeFile(browserOutputPath, `globalThis.MustafaWorldData = ${serializedWorld};\n`, "utf8");
 
-console.log(`Built ${Object.keys(rooms).length} rooms -> ${relative(outputPath)}`);
+console.log(
+  `Built ${Object.keys(rooms).length} rooms -> ${relative(outputPath)}, ${relative(browserOutputPath)}`
+);
 
 async function listMarkdownFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });

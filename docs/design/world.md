@@ -9,5 +9,5 @@
 -   장소는 그래프 노드다.
 -   링크는 동서남북 방향이 아니라 의미적 엣지다.
 -   Obsidian 스타일 Markdown 파일을 `world-vault/`에서 작성한다.
--   런타임은 `src/generated/world.json`에 컴파일된 JSON을 사용한다.
+-   런타임은 `src/generated/world-data.js`에 컴파일된 데이터를 사용한다. 같은 내용의 `src/generated/world.json`은 도구와 검토용으로 함께 유지한다.
 -   온톨로지도 우선 `world-vault/` 안에서 작성한다. 자세한 방침은 [Ontology Design](ontology.md)의 `Obsidian-First 방침`을 따른다.

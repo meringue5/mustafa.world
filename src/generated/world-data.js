@@ -1,4 +1,4 @@
-{
+globalThis.MustafaWorldData = {
   "schemaVersion": 1,
   "startRoom": "home.study",
   "rooms": {
@@ -584,4 +584,4 @@
       "source": "world-vault/rooms/home/study.md"
     }
   }
-}
+};
